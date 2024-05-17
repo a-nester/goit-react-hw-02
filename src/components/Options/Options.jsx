@@ -1,13 +1,13 @@
 import Button from "../Button/Button";
 import "./Options.module.css";
 
-export const Options = () => {
+export const Options = ({ onUpdate }) => {
+  // { handleClickGood, handleClickNeutral }
   return (
     <>
-      <Button>Good</Button>
-      <Button>Neutral</Button>
-      <Button>Bad</Button>
-      <Button>Rest</Button>
+      <Button onUpdate={() => onUpdate("good")}>Good</Button>
+      <Button onUpdate={() => onUpdate("neutral")}>Neutral</Button>
+      <Button onUpdate={() => onUpdate("bad")}>Bad</Button>
     </>
   );
 };
