@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 import { Description } from "./components/Description/Description";
@@ -6,31 +6,51 @@ import { Options } from "./components/Options/Options";
 import { Feedback } from "./components/Feedback/Feedback";
 import { Notification } from "./components/Notification/Notification";
 
+const createValueInit = () => {
+  if (!JSON.parse(localStorage.getItem("value"))) {
+    return { good: 0, neutral: 0, bad: 0 };
+  }
+  return JSON.parse(localStorage.getItem("value"));
+};
+
 function App() {
-  const [values, setValues] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+  const [values, setValues] = useState(createValueInit);
+
+  useEffect(() => {
+    localStorage.setItem("value", JSON.stringify(values));
+  }, [values]);
 
   const updateFeedback = (feedbackType) => {
+    if (feedbackType === "reset") {
+      setValues({
+        good: 0,
+        neutral: 0,
+        bad: 0,
+      });
+      return;
+    }
     setValues({
       ...values,
       [feedbackType]: values[feedbackType] + 1,
     });
-    // const totalFeedback = good + neutral + bad;
   };
+
   const totalFeedback = values.good + values.neutral + values.bad;
-  // console.log(totalFeedback);
+  const positiveFeedback = Math.round((values.good / totalFeedback) * 100);
+
   return (
     <>
       <div className="appBox">
         <Description />
-        <Options onUpdate={updateFeedback} />
+        <Options onUpdate={updateFeedback} total={totalFeedback} />
         {totalFeedback === 0 ? (
           <Notification />
         ) : (
-          <Feedback value={values} total={totalFeedback} />
+          <Feedback
+            value={values}
+            total={totalFeedback}
+            positive={positiveFeedback}
+          />
         )}
       </div>
     </>
