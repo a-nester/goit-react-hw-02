@@ -1,5 +1,4 @@
 export const Feedback = ({ value, total }) => {
-  console.log(value);
   const { good, neutral, bad } = value;
 
   return (
