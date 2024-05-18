@@ -7,11 +7,11 @@ import { Feedback } from "./components/Feedback/Feedback";
 import { Notification } from "./components/Notification/Notification";
 
 const createValueInit = () => {
-  const savedData = JSON.parse(localStorage.getItem("value"));
+  const savedData = localStorage.getItem("value");
   if (!savedData) {
     return { good: 0, neutral: 0, bad: 0 };
   }
-  return savedData;
+  return JSON.parse(savedData);
 };
 
 function App() {
